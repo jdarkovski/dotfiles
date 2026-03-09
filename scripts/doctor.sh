@@ -39,6 +39,23 @@ check_command() {
   fi
 }
 
+check_linux_nerd_fonts() {
+  if [[ "$(uname -s)" != "Linux" ]]; then
+    return
+  fi
+
+  if ! command -v fc-list >/dev/null 2>&1; then
+    warn "Cannot check Nerd Fonts: fc-list is unavailable."
+    return
+  fi
+
+  if fc-list | grep -Eiq 'Nerd Font|Symbols Nerd Font'; then
+    ok "Nerd Font detected in fontconfig cache."
+  else
+    warn "No Nerd Font detected. Starship glyphs may render incorrectly."
+  fi
+}
+
 check_linux_login_shell() {
   local target_user="${SUDO_USER:-${USER}}"
   local expected_shell
@@ -171,6 +188,7 @@ case "$(uname -s)" in
     ;;
 esac
 
+check_linux_nerd_fonts
 check_linux_login_shell
 
 echo

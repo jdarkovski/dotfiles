@@ -10,11 +10,13 @@ font-family-italic = ""
 font-family-bold-italic = ""
 font-feature = ""
 
-# Use the font's canonical family name so Ghostty resolves the exact face.
+# Use a fallback chain that works across macOS and Fedora package names.
 font-family = "JetBrainsMono NFM"
-font-family-bold = "JetBrainsMono NFM"
-font-family-italic = "JetBrainsMono NFM"
-font-family-bold-italic = "JetBrainsMono NFM"
+font-family = "JetBrainsMono Nerd Font Mono"
+font-family = "JetBrainsMono Nerd Font"
+font-family = "JetBrainsMonoNL NFM"
+font-family = "Symbols Nerd Font Mono"
+font-family = "JetBrains Mono"
 font-size = 14
 
 # --------------------------------------------------

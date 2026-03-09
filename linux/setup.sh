@@ -18,9 +18,24 @@ run_as_root() {
   exit 1
 }
 
+install_first_available_package() {
+  local label="$1"
+  shift
+
+  local pkg
+  for pkg in "$@"; do
+    if run_as_root dnf install -y "${pkg}"; then
+      echo "Installed ${label}: ${pkg}"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
 install_required_packages() {
   run_as_root dnf install -y \
-    git curl zsh tmux fzf neovim ripgrep nodejs python3 rustup gh tree dnf-plugins-core
+    git curl zsh tmux fzf neovim ripgrep nodejs python3 rustup gh tree dnf-plugins-core fontconfig
 
   if ! run_as_root dnf install -y fd-find; then
     run_as_root dnf install -y fd
@@ -49,6 +64,41 @@ install_optional_packages() {
       echo "Skipping unavailable optional package: ${pkg}"
     fi
   done
+}
+
+install_nerd_fonts() {
+  local installed_any=0
+
+  if install_first_available_package \
+    "JetBrains Mono Nerd Font package" \
+    jetbrains-mono-nerd-fonts \
+    nerd-fonts-jetbrains-mono \
+    nerd-fonts-jetbrainsmono; then
+    installed_any=1
+  else
+    echo "JetBrains Mono Nerd Font package not found in current Fedora repos."
+  fi
+
+  if install_first_available_package \
+    "Nerd symbols font package" \
+    symbols-only-nerd-fonts \
+    nerd-fonts-symbols-only \
+    nerd-fonts-symbols \
+    nerd-fonts; then
+    installed_any=1
+  else
+    echo "Nerd symbols package not found in current Fedora repos."
+  fi
+
+  if (( installed_any == 0 )); then
+    echo "Warning: no Nerd Fonts package was installed."
+    echo "Starship powerline glyphs may render incorrectly until a Nerd Font is installed."
+    return
+  fi
+
+  if run_as_root fc-cache -f; then
+    echo "Refreshed font cache."
+  fi
 }
 
 install_ghostty_from_copr() {
@@ -117,6 +167,9 @@ install_required_packages
 
 echo "Installing optional Fedora packages..."
 install_optional_packages
+
+echo "Installing Nerd Fonts for Starship glyph support..."
+install_nerd_fonts
 
 install_ghostty_from_copr
 
