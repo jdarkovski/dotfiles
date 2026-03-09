@@ -27,6 +27,49 @@ plugins=(
 source "$ZSH/oh-my-zsh.sh"
 
 # ------------------------------------------------------------
+# plugin colours
+# ------------------------------------------------------------
+
+# zsh-autosuggestions:
+# soft grey suggestion text
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#666666"
+
+# zsh-syntax-highlighting:
+# keep most things neutral, use red for errors
+typeset -A ZSH_HIGHLIGHT_STYLES
+
+# default text
+ZSH_HIGHLIGHT_STYLES[default]='fg=#bbbbbb'
+
+# commands that exist
+ZSH_HIGHLIGHT_STYLES[command]='fg=#bbbbbb'
+
+# builtins / aliases / functions
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#aaaaaa'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#aaaaaa'
+ZSH_HIGHLIGHT_STYLES[function]='fg=#aaaaaa'
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#aaaaaa'
+
+# paths and arguments
+ZSH_HIGHLIGHT_STYLES[path]='fg=#999999'
+ZSH_HIGHLIGHT_STYLES[arg0]='fg=#bbbbbb'
+
+# strings / quotes
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#888888'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#888888'
+
+# options / flags
+ZSH_HIGHLIGHT_STYLES[option]='fg=#999999'
+
+# unknown / bad commands in red
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=red,bold'
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#777777'
+
+# history substring search colours
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=#aaaaaa,bold'
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=red,bold'
+
+# ------------------------------------------------------------
 # history configuration
 # ------------------------------------------------------------
 
