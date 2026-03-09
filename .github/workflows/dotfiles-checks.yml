@@ -1,0 +1,43 @@
+name: Dotfiles Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  shell-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install lint dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck zsh
+
+      - name: Bash syntax check
+        run: |
+          mapfile -t bash_files < <(find . -type f \( -name "*.sh" -o -name "install.sh" \) | sort)
+          bash -n "${bash_files[@]}"
+
+      - name: Zsh syntax check
+        run: zsh -n home/.zshrc home/.zprofile
+
+      - name: Shellcheck
+        run: |
+          mapfile -t bash_files < <(find . -type f \( -name "*.sh" -o -name "install.sh" \) | sort)
+          shellcheck "${bash_files[@]}"
+
+  brewfile-check:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Brewfile
+        run: brew bundle list --file=Brewfile --all >/dev/null

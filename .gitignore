@@ -19,6 +19,7 @@
 *.local.*
 .local/
 .zshrc.local
+.zprofile.local
 .gitconfig.local
 ssh_config.local
 

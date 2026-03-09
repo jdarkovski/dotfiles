@@ -5,13 +5,6 @@
 export ZSH="$HOME/.oh-my-zsh"
 
 # ------------------------------------------------------------
-# android sdk configuration
-# ------------------------------------------------------------
-
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-export PATH="$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools"
-
-# ------------------------------------------------------------
 # oh-my-zsh plugins
 # ------------------------------------------------------------
 
@@ -24,7 +17,11 @@ plugins=(
   zsh-syntax-highlighting
 )
 
-source "$ZSH/oh-my-zsh.sh"
+if [[ -f "$ZSH/oh-my-zsh.sh" ]]; then
+  source "$ZSH/oh-my-zsh.sh"
+else
+  echo "oh-my-zsh is not installed at $ZSH. Run ./install.sh." >&2
+fi
 
 # ------------------------------------------------------------
 # plugin colours
@@ -100,6 +97,16 @@ precmd() { print -Pn "\e]0;%~ (%b)\a" }
 # shell tools
 # ------------------------------------------------------------
 
-eval "$(zoxide init zsh)"
-eval "$(atuin init zsh)"
-eval "$(starship init zsh)"
+if ! command -v fd >/dev/null 2>&1 && command -v fdfind >/dev/null 2>&1; then
+  alias fd="fdfind"
+fi
+
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
+command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
+
+# ------------------------------------------------------------
+# local machine-specific overrides
+# ------------------------------------------------------------
+
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

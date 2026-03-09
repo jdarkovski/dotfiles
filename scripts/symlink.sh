@@ -2,15 +2,40 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+TIMESTAMP="$(date +%Y%m%d%H%M%S)"
 
-mkdir -p "$HOME/.config"
-mkdir -p "$HOME/.config/ghostty"
+link_file() {
+  local source="$1"
+  local target="$2"
+  local backup_target
 
-ln -sf "$DOTFILES_DIR/home/.zshrc" "$HOME/.zshrc"
-ln -sf "$DOTFILES_DIR/home/.zprofile" "$HOME/.zprofile"
-ln -sf "$DOTFILES_DIR/home/.gitconfig" "$HOME/.gitconfig"
-ln -sf "$DOTFILES_DIR/home/.gitignore_global" "$HOME/.gitignore_global"
-ln -sf "$DOTFILES_DIR/home/.tmux.conf" "$HOME/.tmux.conf"
+  mkdir -p "$(dirname "${target}")"
 
-ln -sf "$DOTFILES_DIR/config/starship.toml" "$HOME/.config/starship.toml"
-ln -sf "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
+  if [[ -L "${target}" ]]; then
+    local existing_link
+    existing_link="$(readlink "${target}")"
+
+    if [[ "${existing_link}" == "${source}" ]]; then
+      echo "Already linked: ${target}"
+      return
+    fi
+  fi
+
+  if [[ -e "${target}" || -L "${target}" ]]; then
+    backup_target="${target}.backup.${TIMESTAMP}"
+    mv "${target}" "${backup_target}"
+    echo "Backed up ${target} to ${backup_target}"
+  fi
+
+  ln -s "${source}" "${target}"
+  echo "Linked ${target} -> ${source}"
+}
+
+link_file "${DOTFILES_DIR}/home/.zshrc" "${HOME}/.zshrc"
+link_file "${DOTFILES_DIR}/home/.zprofile" "${HOME}/.zprofile"
+link_file "${DOTFILES_DIR}/home/.gitconfig" "${HOME}/.gitconfig"
+link_file "${DOTFILES_DIR}/home/.gitignore_global" "${HOME}/.gitignore_global"
+link_file "${DOTFILES_DIR}/home/.tmux.conf" "${HOME}/.tmux.conf"
+
+link_file "${DOTFILES_DIR}/config/starship.toml" "${HOME}/.config/starship.toml"
+link_file "${DOTFILES_DIR}/config/ghostty/config" "${HOME}/.config/ghostty/config"
