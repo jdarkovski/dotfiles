@@ -10,16 +10,6 @@ elif [[ -x /usr/local/bin/brew ]]; then
 fi
 
 # ------------------------------------------------------------
-# user paths
-# ------------------------------------------------------------
-
-# Local user binaries
-export PATH="$HOME/.local/bin:$PATH"
-
-# Rust cargo binaries
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# ------------------------------------------------------------
 # local machine-specific overrides
 # ------------------------------------------------------------
 

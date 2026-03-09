@@ -14,6 +14,12 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 
 export LANG="${LANG:-en_US.UTF-8}"
 
+# Ensure user-installed binaries are available in both login and non-login
+# shells (e.g. terminal emulators that start non-login shells on Linux).
+typeset -U path
+path=("$HOME/.local/bin" "$HOME/.cargo/bin" $path)
+export PATH
+
 # ------------------------------------------------------------
 # local machine-specific overrides
 # ------------------------------------------------------------

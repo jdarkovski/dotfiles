@@ -35,7 +35,7 @@ install_first_available_package() {
 
 install_required_packages() {
   run_as_root dnf install -y \
-    git curl zsh tmux fzf neovim ripgrep nodejs python3 rustup gh tree dnf-plugins-core fontconfig
+    git curl zsh tmux fzf starship neovim ripgrep nodejs python3 rustup gh tree dnf-plugins-core fontconfig
 
   if ! run_as_root dnf install -y fd-find; then
     run_as_root dnf install -y fd
@@ -44,7 +44,6 @@ install_required_packages() {
 
 install_optional_packages() {
   local optional_packages=(
-    starship
     zoxide
     atuin
     lazygit
