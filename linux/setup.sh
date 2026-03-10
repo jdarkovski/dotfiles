@@ -96,6 +96,7 @@ install_required_packages() {
     neovim
     ripgrep
     nodejs
+    golang
     python3
     rustup
     gh
@@ -185,6 +186,73 @@ install_nerd_fonts() {
   fi
 }
 
+choose_gnome_terminal_font() {
+  local candidates=(
+    "JetBrainsMono Nerd Font Mono"
+    "JetBrainsMono Nerd Font"
+    "JetBrainsMono NFM"
+    "JetBrainsMonoNL NFM"
+    "Symbols Nerd Font Mono"
+    "JetBrains Mono"
+  )
+  local candidate
+
+  if command -v fc-list >/dev/null 2>&1; then
+    for candidate in "${candidates[@]}"; do
+      if fc-list | grep -Fqi "${candidate}"; then
+        echo "${candidate} 12"
+        return 0
+      fi
+    done
+  fi
+
+  echo "Monospace 12"
+}
+
+configure_gnome_terminal_font() {
+  local raw_profiles
+  local profile_ids
+  local profile_id
+  local profile_path
+  local profile_schema
+  local font_choice
+
+  if ! command -v gsettings >/dev/null 2>&1; then
+    echo "Skipping GNOME Terminal font config: gsettings unavailable."
+    return
+  fi
+
+  if ! gsettings list-schemas 2>/dev/null | grep -qx "org.gnome.Terminal.ProfilesList"; then
+    echo "Skipping GNOME Terminal font config: GNOME Terminal schema not found."
+    return
+  fi
+
+  if ! raw_profiles="$(gsettings get org.gnome.Terminal.ProfilesList list 2>/dev/null)"; then
+    echo "Skipping GNOME Terminal font config: could not read terminal profiles."
+    return
+  fi
+
+  profile_ids="$(printf '%s' "${raw_profiles}" | tr -d "[]',")"
+  if [[ -z "${profile_ids// /}" ]]; then
+    echo "Skipping GNOME Terminal font config: no terminal profiles found."
+    return
+  fi
+
+  font_choice="$(choose_gnome_terminal_font)"
+
+  for profile_id in ${profile_ids}; do
+    profile_path="/org/gnome/terminal/legacy/profiles:/:${profile_id}/"
+    profile_schema="org.gnome.Terminal.Legacy.Profile:${profile_path}"
+
+    if gsettings set "${profile_schema}" use-system-font false \
+      && gsettings set "${profile_schema}" font "${font_choice}"; then
+      echo "Configured GNOME Terminal profile ${profile_id} font: ${font_choice}"
+    else
+      echo "Could not configure GNOME Terminal profile ${profile_id}."
+    fi
+  done
+}
+
 install_ghostty_from_copr() {
   local repo="scottames/ghostty"
 
@@ -254,6 +322,9 @@ install_optional_packages
 
 echo "Installing Nerd Fonts for Starship glyph support..."
 install_nerd_fonts
+
+echo "Configuring GNOME Terminal profile fonts..."
+configure_gnome_terminal_font
 
 install_ghostty_from_copr
 

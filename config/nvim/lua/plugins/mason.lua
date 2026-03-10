@@ -1,28 +1,49 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
--- Customize Mason
-
+-- Reproducible Mason tools across machines (macOS/Fedora).
+-- Package names should match entries from `:Mason`.
 ---@type LazySpec
 return {
-  -- use mason-tool-installer for automatically installing Mason packages
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
-    -- overrides `require("mason-tool-installer").setup(...)`
-    opts = {
-      -- Make sure to use the names found in `:Mason`
-      ensure_installed = {
-        -- install language servers
+    opts = function(_, opts)
+      opts.ensure_installed = opts.ensure_installed or {}
+      opts.ensure_installed = require("astrocore").list_insert_unique(opts.ensure_installed, {
+        -- Shell / Lua
+        "bash-language-server",
+        "shellcheck",
+        "shfmt",
         "lua-language-server",
-
-        -- install formatters
         "stylua",
 
-        -- install debuggers
-        "debugpy",
+        -- Config / docs
+        "json-lsp",
+        "yaml-language-server",
+        "taplo",
+        "marksman",
 
-        -- install any other package
+        -- Web / JS / TS
+        "typescript-language-server",
+        "eslint-lsp",
+        "html-lsp",
+        "css-lsp",
+        "tailwindcss-language-server",
+
+        -- Python
+        "pyright",
+        "ruff",
+
+        -- Systems / backend
+        "clangd",
+        "cmake-language-server",
+        "rust-analyzer",
+        "gopls",
+        "jdtls",
+
+        -- Containers
+        "dockerfile-language-server",
+
+        -- Utility
         "tree-sitter-cli",
-      },
-    },
+      })
+    end,
   },
 }

@@ -56,6 +56,47 @@ check_linux_nerd_fonts() {
   fi
 }
 
+check_linux_gnome_terminal_font() {
+  local raw_default
+  local profile_id
+  local profile_path
+  local profile_schema
+  local use_system_font
+  local configured_font
+
+  if [[ "$(uname -s)" != "Linux" ]]; then
+    return
+  fi
+
+  if ! command -v gsettings >/dev/null 2>&1; then
+    return
+  fi
+
+  if ! gsettings list-schemas 2>/dev/null | grep -qx "org.gnome.Terminal.ProfilesList"; then
+    return
+  fi
+
+  raw_default="$(gsettings get org.gnome.Terminal.ProfilesList default 2>/dev/null || true)"
+  profile_id="${raw_default//\'}"
+
+  if [[ -z "${profile_id}" ]]; then
+    warn "Cannot verify GNOME Terminal font: default profile not found."
+    return
+  fi
+
+  profile_path="/org/gnome/terminal/legacy/profiles:/:${profile_id}/"
+  profile_schema="org.gnome.Terminal.Legacy.Profile:${profile_path}"
+  use_system_font="$(gsettings get "${profile_schema}" use-system-font 2>/dev/null || true)"
+  configured_font="$(gsettings get "${profile_schema}" font 2>/dev/null || true)"
+
+  if [[ "${use_system_font}" == "false" ]] \
+    && [[ "${configured_font}" == *"Nerd"* || "${configured_font}" == *"JetBrainsMono"* ]]; then
+    ok "GNOME Terminal default profile uses Nerd-compatible font: ${configured_font}"
+  else
+    warn "GNOME Terminal default profile font is ${configured_font} (use-system-font=${use_system_font})"
+  fi
+}
+
 check_linux_login_shell() {
   local target_user="${SUDO_USER:-${USER}}"
   local expected_shell
@@ -175,6 +216,7 @@ check_command fzf
 check_command starship
 check_command zoxide
 check_command atuin
+check_command go
 
 case "$(uname -s)" in
   Darwin)
@@ -190,6 +232,7 @@ case "$(uname -s)" in
 esac
 
 check_linux_nerd_fonts
+check_linux_gnome_terminal_font
 check_linux_login_shell
 
 echo
