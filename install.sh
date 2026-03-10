@@ -30,12 +30,12 @@ echo ""
 echo "Applying OS specific configuration..."
 
 case "${OS}" in
-  Darwin)
-    if [[ -f "$DOTFILES_DIR/macos/defaults.sh" ]]; then
-      echo "Applying macOS defaults..."
-      bash "$DOTFILES_DIR/macos/defaults.sh"
-    fi
-    ;;
+Darwin)
+  if [[ -f "$DOTFILES_DIR/macos/defaults.sh" ]]; then
+    echo "Applying macOS defaults..."
+    bash "$DOTFILES_DIR/macos/defaults.sh"
+  fi
+  ;;
 esac
 
 echo ""

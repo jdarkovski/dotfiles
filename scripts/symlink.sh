@@ -46,6 +46,7 @@ link_file "${DOTFILES_DIR}/home/.ssh/config" "${HOME}/.ssh/config"
 
 link_file "${DOTFILES_DIR}/config/starship.toml" "${HOME}/.config/starship.toml"
 link_file "${DOTFILES_DIR}/config/ghostty/config" "${HOME}/.config/ghostty/config"
+link_file "${DOTFILES_DIR}/config/nvim" "${HOME}/.config/nvim"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
   link_file "${DOTFILES_DIR}/config/ghostty/config" "${HOME}/Library/Application Support/com.mitchellh.ghostty/config"

@@ -10,6 +10,7 @@ TARGET_KEYS=(
   tmux
   starship
   ghostty
+  nvim
   sshconfig
 )
 BACKUP_RESULTS=()
@@ -29,7 +30,7 @@ Commands:
       Restore a backup for a target. Current target is saved first.
 
 Targets:
-  zshrc, zshenv, zprofile, gitconfig, gitignore, tmux, starship, ghostty, sshconfig
+  zshrc, zshenv, zprofile, gitconfig, gitignore, tmux, starship, ghostty, nvim, sshconfig
 EOF
 }
 
@@ -43,6 +44,7 @@ target_path() {
     tmux) echo "${HOME}/.tmux.conf" ;;
     starship) echo "${HOME}/.config/starship.toml" ;;
     ghostty) echo "${HOME}/.config/ghostty/config" ;;
+    nvim) echo "${HOME}/.config/nvim" ;;
     sshconfig) echo "${HOME}/.ssh/config" ;;
     *)
       return 1

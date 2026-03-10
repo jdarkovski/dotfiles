@@ -161,6 +161,7 @@ check_repo_file "home/.gitconfig"
 check_repo_file "home/.ssh/config"
 check_repo_file "config/starship.toml"
 check_repo_file "config/ghostty/config"
+check_repo_file "config/nvim/init.lua"
 check_repo_file "macos/defaults.sh"
 check_repo_file "linux/setup.sh"
 
@@ -202,6 +203,7 @@ check_target_link "${DOTFILES_DIR}/home/.tmux.conf" "${HOME}/.tmux.conf"
 check_target_link "${DOTFILES_DIR}/home/.ssh/config" "${HOME}/.ssh/config"
 check_target_link "${DOTFILES_DIR}/config/starship.toml" "${HOME}/.config/starship.toml"
 check_target_link "${DOTFILES_DIR}/config/ghostty/config" "${HOME}/.config/ghostty/config"
+check_target_link "${DOTFILES_DIR}/config/nvim" "${HOME}/.config/nvim"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
   check_target_link "${DOTFILES_DIR}/config/ghostty/config" "${HOME}/Library/Application Support/com.mitchellh.ghostty/config"
