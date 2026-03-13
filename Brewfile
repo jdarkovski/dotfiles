@@ -28,7 +28,7 @@ brew "go"
 brew "python@3.14"
 brew "rustup"
 brew "dotnet", link: false
-brew "mactex"
+cask "mactex"
 
 # ------------------------------------------------------------
 # development tools
