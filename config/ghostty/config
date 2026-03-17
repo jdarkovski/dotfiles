@@ -8,7 +8,7 @@ font-family = ""
 font-family-bold = ""
 font-family-italic = ""
 font-family-bold-italic = ""
-font-feature = ""
+font-feature = -calt, -liga
 
 # Use a fallback chain that works across macOS and Fedora package names.
 font-family = "JetBrainsMono NFM"
