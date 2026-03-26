@@ -86,8 +86,7 @@ cask "ghostty"
 # web / browsing
 # ------------------------------------------------------------
 
-cask "google-chrome"
-cask "firefox"
+cask "zen"
 
 # ------------------------------------------------------------
 # productivity
