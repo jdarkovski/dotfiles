@@ -9,5 +9,7 @@ return {
   { import = "astrocommunity.utility.live-server-nvim" },
   { import = "astrocommunity.pack.rust" },
   { import = "astrocommunity.media.cord-nvim" },
+  { import = "astrocommunity.markdown-and-latex.vimtex" },
+
   -- import/override with your plugins folder
 }
